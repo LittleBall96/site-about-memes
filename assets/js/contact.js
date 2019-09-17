@@ -1,6 +1,6 @@
 // Métodos CRUD de EMPRESA
 function create(){
-  firebase.database().ref('contato').push(params());
+  fireabase.database().ref('contato').push(params());
 };
 // Auxiliares
 function params(){
@@ -10,11 +10,30 @@ function params(){
   
   return { name:name.value, email:email.value, message:message.value}
 };
+function update(key){
+  fireabase.database().ref('companies').child(key).update(params());
+};
+
+function destroy(key){
+  fireabase.database().ref('companies').child(key).remove();
+};
+
+function read(key){
+  fireabase.database().ref('companies').child(key).on('value',function(i){
+    $('#key').val(i.key);
+    $('#company').val(i.val().company);
+    $('#address').val(i.val().address);
+    $('#phone').val(i.val().phone);
+    $('#contact').val(i.val().contact);
+  });
+};
+
+
 
 // Grid de Companies
-firebase.database().ref('contato').on('value',function(snapshot){
-  $('#contatoList tbody').html('');
+fireabase.database().ref('companies').on('value',function(snapshot){
+  $('#companiesList tbody').html('');
   snapshot.forEach(function(i){
-    $('#contatoList tbody').append("<tr><td>"+i.val().name+"</td><td>"+i.val().email+"</td><td>"+i.val().message+"</td></tr>");
+    $('#companiesList tbody').append("<tr><td>"+i.val().company+"</td><td>"+i.val().address+"</td><td>"+i.val().phone+"</td><td>"+i.val().contact+"</td></tr>")
   });
 });
